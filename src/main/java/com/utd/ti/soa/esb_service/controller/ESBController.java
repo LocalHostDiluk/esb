@@ -44,7 +44,7 @@ public class ESBController {
         
         //Enviar petición al servicio de usuarios
         String response = webClient.post()
-            .uri("http://user-service:5000/app/users/create")
+            .uri("http://users.railway.internal:5000/app/users/create")
             .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .body(BodyInserters.fromValue(user))
             .retrieve()
@@ -66,7 +66,7 @@ public class ESBController {
         }
 
         String response = webClient.get()
-            .uri("http://user-service:5000/app/users/all")
+            .uri("http://users.railway.internal:5000/app/users/all")
             .retrieve()
             .bodyToMono(String.class)
             .doOnError(error -> System.out.println("Error: " + error.getMessage()))
@@ -90,7 +90,7 @@ public class ESBController {
         }
 
         String response = webClient.patch() // Usamos PATCH en lugar de POST
-            .uri("http://user-service:5000/app/users/update/" + id) // Coincide con la ruta del backend
+            .uri("http://users.railway.internal:5000/app/users/update/" + id) // Coincide con la ruta del backend
             .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .body(BodyInserters.fromValue(user))
             .retrieve()
@@ -114,7 +114,7 @@ public class ESBController {
         }
 
         String response = webClient.delete() // Usamos DELETE en lugar de POST
-            .uri("http://user-service:5000/app/users/delete/" + id) // Coincide con la ruta del backend
+            .uri("http://users.railway.internal:5000/app/users/delete/" + id) // Coincide con la ruta del backend
             .retrieve()
             .bodyToMono(String.class)
             .doOnError(error -> System.out.println("Error: " + error.getMessage()))
@@ -156,7 +156,7 @@ public class ESBController {
         newUser.setPassword("123456789a");
 
         String userResponse = webClient.post()
-            .uri("http://user-service:5000/app/users/create")
+            .uri("http://users.railway.internal:5000/app/users/create")
             .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .body(BodyInserters.fromValue(newUser))
             .retrieve()
