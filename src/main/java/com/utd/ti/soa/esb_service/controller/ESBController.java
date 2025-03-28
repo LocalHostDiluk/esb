@@ -123,6 +123,22 @@ public class ESBController {
         return ResponseEntity.ok(response);
     }
 
+    //Login
+    @PostMapping("/user/login")
+    public ResponseEntity login(@RequestBody User user) {
+        System.out.println("Request Body: " + user);
+
+        String response = webClient.post()
+            .uri("http://users.railway.internal:5000/app/users/login")
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .body(BodyInserters.fromValue(user))
+            .retrieve()
+            .bodyToMono(String.class)
+            .doOnError(error -> System.out.println("Error: " + error.getMessage()))
+            .block();
+
+        return ResponseEntity.ok(response);
+    }
 
     //Crear cliente
     @PostMapping("/client")
