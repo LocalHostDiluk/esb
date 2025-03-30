@@ -155,7 +155,7 @@ public class ESBController {
 
         // Enviar petición al servicio de clientes
         String clientResponse = webClient.post()
-            .uri("http://localhost:7000/app/client/create")
+            .uri("http://cliente.railway.internal:7000/app/client/create")
             .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .body(BodyInserters.fromValue(client))
             .retrieve()
@@ -197,7 +197,7 @@ public class ESBController {
         }
 
         String response = webClient.get()
-            .uri("http://localhost:7000/app/client/all")
+            .uri("http://cliente.railway.internal:7000/app/client/all")
             .retrieve()
             .bodyToMono(String.class)
             .doOnError(error -> System.out.println("Error al obtener clientes: " + error.getMessage()))
@@ -221,7 +221,7 @@ public class ESBController {
         }
 
         String response = webClient.patch()
-            .uri("http://localhost:7000/app/client/update/" + id)
+            .uri("http://cliente.railway.internal:7000/app/client/update/" + id)
             .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .body(BodyInserters.fromValue(client))
             .retrieve()
@@ -245,7 +245,7 @@ public class ESBController {
         }
 
         String response = webClient.delete()
-            .uri("http://localhost:7000/app/client/delete/" + id)
+            .uri("http://cliente.railway.internal:7000/app/client/delete/" + id)
             .retrieve()
             .bodyToMono(String.class)
             .doOnError(error -> System.out.println("Error al eliminar cliente: " + error.getMessage()))
