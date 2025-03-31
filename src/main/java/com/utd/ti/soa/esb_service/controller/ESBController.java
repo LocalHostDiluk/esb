@@ -18,18 +18,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.utd.ti.soa.esb_service.model.Client;
 import com.utd.ti.soa.esb_service.model.User;
 import com.utd.ti.soa.esb_service.utils.Auth;
 
-@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/app/esb")
 public class ESBController {
     private final WebClient webClient = WebClient.create();
     private final Auth auth = new Auth();
+
+    //Obtener todos los usuarios
+    @GetMapping("/user")
+    public ResponseEntity getUser() {
+        System.out.println("Llamada a /user sin token");
+    
+        String response = webClient.get()
+            .uri("http://users.railway.internal:5000/app/users/all")
+            .retrieve()
+            .bodyToMono(String.class)
+            .doOnError(error -> System.out.println("Error: " + error.getMessage()))
+            .block();
+    
+        return ResponseEntity.ok(response);
+    }
 
     //Crear usuario
     @PostMapping("/user")
@@ -54,21 +67,6 @@ public class ESBController {
             .doOnError(error -> System.out.println("Error: " + error.getMessage()))
             .block();
         
-        return ResponseEntity.ok(response);
-    }
-
-    //Obtener todos los usuarios
-    @GetMapping("/user")
-    public ResponseEntity getUser() {
-        System.out.println("Llamada a /user sin token");
-    
-        String response = webClient.get()
-            .uri("http://users.railway.internal:5000/app/users/all")
-            .retrieve()
-            .bodyToMono(String.class)
-            .doOnError(error -> System.out.println("Error: " + error.getMessage()))
-            .block();
-    
         return ResponseEntity.ok(response);
     }
 
