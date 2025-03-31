@@ -57,21 +57,16 @@ public class ESBController {
 
     //Obtener todos los usuarios
     @GetMapping("/user")
-    public ResponseEntity getUser (@RequestHeader(HttpHeaders.AUTHORIZATION) String token){
-        System.out.println("Token recibido: " + token);
-        
-        if (!auth.validateToken(token)){
-            return ResponseEntity.status(401)
-                .body("Token inválido o expirado");
-        }
-
+    public ResponseEntity getUser() {
+        System.out.println("Llamada a /user sin token");
+    
         String response = webClient.get()
             .uri("http://users.railway.internal:5000/app/users/all")
             .retrieve()
             .bodyToMono(String.class)
             .doOnError(error -> System.out.println("Error: " + error.getMessage()))
             .block();
-        
+    
         return ResponseEntity.ok(response);
     }
 
