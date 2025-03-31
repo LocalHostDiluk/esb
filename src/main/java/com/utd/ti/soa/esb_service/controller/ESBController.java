@@ -18,11 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.utd.ti.soa.esb_service.model.Client;
 import com.utd.ti.soa.esb_service.model.User;
 import com.utd.ti.soa.esb_service.utils.Auth;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/app/esb")
 public class ESBController {
