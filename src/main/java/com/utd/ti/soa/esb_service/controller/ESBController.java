@@ -21,6 +21,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.utd.ti.soa.esb_service.model.Client;
 import com.utd.ti.soa.esb_service.model.User;
+import com.utd.ti.soa.esb_service.model.Product;
 import com.utd.ti.soa.esb_service.utils.Auth;
 
 @RestController
