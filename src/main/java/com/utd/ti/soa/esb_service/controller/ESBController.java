@@ -21,8 +21,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.utd.ti.soa.esb_service.model.Client;
 import com.utd.ti.soa.esb_service.model.User;
-import com.utd.ti.soa.esb_service.model.Product;
 import com.utd.ti.soa.esb_service.utils.Auth;
+import com.utd.ti.soa.esb_service.model.Product;
 
 @RestController
 @RequestMapping("/app/esb")
@@ -252,7 +252,7 @@ public class ESBController {
 
     //Obtener todos los productos
     @GetMapping("/producto")
-    public ResponseEntity getUser() {
+    public ResponseEntity getProduct() {
         System.out.println("Llamada a /user sin token");
     
         String response = webClient.get()
@@ -265,77 +265,4 @@ public class ESBController {
         return ResponseEntity.ok(response);
     }
 
-    //Crear producto
-    @PostMapping("/producto")
-    public ResponseEntity createUser (@RequestBody Product product,
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String token){
-        System.out.println("Request Body: " + product);
-        System.out.println("Token recibido: " + token);
-
-        //Validar token
-        if (!auth.validateToken(token)){
-            return ResponseEntity.status(401)
-                .body("Token inválido o expirado");
-        }
-        
-        //Enviar petición al servicio de usuarios
-        String response = webClient.post()
-            .uri("http://productos.railway.internal:5000/app/users/create")
-            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-            .body(BodyInserters.fromValue(user))
-            .retrieve()
-            .bodyToMono(String.class)
-            .doOnError(error -> System.out.println("Error: " + error.getMessage()))
-            .block();
-        
-        return ResponseEntity.ok(response);
-    }
-
-    // Actualizar producto
-    @PatchMapping("/producto/update/{id}")
-    public ResponseEntity updateUser(@PathVariable String id,
-            @RequestBody User user,
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        System.out.println("Request Body: " + user);
-        System.out.println("Token recibido: " + token);
-        System.out.println("ID: " + id);
-
-        if (!auth.validateToken(token)) {
-            return ResponseEntity.status(401)
-                .body("Token inválido o expirado");
-        }
-
-        String response = webClient.patch() // Usamos PATCH en lugar de POST
-            .uri("http://users.railway.internal:5000/app/users/update/" + id) // Coincide con la ruta del backend
-            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-            .body(BodyInserters.fromValue(user))
-            .retrieve()
-            .bodyToMono(String.class)
-            .doOnError(error -> System.out.println("Error: " + error.getMessage()))
-            .block();
-
-        return ResponseEntity.ok(response);
-    }
-
-    // Eliminar producto
-    @DeleteMapping("/producto/delete/{id}")
-    public ResponseEntity deleteUser(@PathVariable String id,
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        System.out.println("ID recibido para eliminar: " + id);
-        System.out.println("Token recibido: " + token);
-
-        if (!auth.validateToken(token)) {
-            return ResponseEntity.status(401)
-                .body("Token inválido o expirado");
-        }
-
-        String response = webClient.delete() // Usamos DELETE en lugar de POST
-            .uri("http://users.railway.internal:5000/app/users/delete/" + id) // Coincide con la ruta del backend
-            .retrieve()
-            .bodyToMono(String.class)
-            .doOnError(error -> System.out.println("Error: " + error.getMessage()))
-            .block();
-
-        return ResponseEntity.ok(response);
-    }
 }
