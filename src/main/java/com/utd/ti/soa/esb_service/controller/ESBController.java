@@ -252,8 +252,8 @@ public class ESBController {
 
     //Obtener todos los productos
     @GetMapping("/producto")
-    public ResponseEntity getProduct() {
-        System.out.println("Llamada a /user sin token");
+    public ResponseEntity getProduct(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        System.out.println("Token" + token);
     
         String response = webClient.get()
             .uri("http://productos.railway.internal:5000/app/products/all")
