@@ -30,18 +30,26 @@ public class ESBController {
     private final WebClient webClient = WebClient.create();
     private final Auth auth = new Auth();
 
-    //Obtener todos los usuarios
+    //Obtener todos los usuarios con autenticación
     @GetMapping("/user")
-    public ResponseEntity getUser() {
-        System.out.println("Llamada a /user sin token");
-    
+    public ResponseEntity getUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        System.out.println("Token recibido: " + token);
+
+        // Validar token
+        if (!auth.validateToken(token)) {
+            return ResponseEntity.status(401)
+                .body("Token inválido o expirado");
+        }
+
+        // Enviar petición al servicio de usuarios
         String response = webClient.get()
             .uri("http://users.railway.internal:5000/app/users/all")
+            .header(HttpHeaders.AUTHORIZATION, token) // Agregar el token en la petición
             .retrieve()
             .bodyToMono(String.class)
             .doOnError(error -> System.out.println("Error: " + error.getMessage()))
             .block();
-    
+
         return ResponseEntity.ok(response);
     }
 
@@ -252,8 +260,8 @@ public class ESBController {
 
     //Obtener todos los productos
     @GetMapping("/producto")
-    public ResponseEntity getProduct() {
-        System.out.println("Llamada a /user sin token");
+    public ResponseEntity getProduct(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        System.out.println("Token recibido: " + token);
     
         String response = webClient.get()
             .uri("http://productos.railway.internal:5000/app/products/all")
