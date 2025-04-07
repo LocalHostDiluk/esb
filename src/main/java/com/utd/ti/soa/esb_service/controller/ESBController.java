@@ -129,23 +129,24 @@ public class ESBController {
 
     //Login
     @PostMapping("/user/login")
-    public ResponseEntity login(@PathVariable String username, @PathVariable String password,
-            @RequestBody User user) {
-        System.out.println("Request Body: " + username);
-        System.out.println("Request Body: " + password);
-
+    public ResponseEntity<String> login(@RequestBody Map<String, String> credentials) {
+        String username = credentials.get("username");
+        String password = credentials.get("password");
+    
+        System.out.println("Username: " + username);
+        System.out.println("Password: " + password);
+    
         String response = webClient.post()
             .uri("http://users.railway.internal:5000/app/users/login")
             .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-            .body(BodyInserters.fromValue(user))
+            .body(BodyInserters.fromValue(credentials))
             .retrieve()
             .bodyToMono(String.class)
             .doOnError(error -> System.out.println("Error: " + error.getMessage()))
             .block();
-
+    
         return ResponseEntity.ok(response);
     }
-
 
     //Crear cliente
     @PostMapping("/client")
