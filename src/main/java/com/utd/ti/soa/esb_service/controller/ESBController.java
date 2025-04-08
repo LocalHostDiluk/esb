@@ -149,6 +149,24 @@ public class ESBController {
         return ResponseEntity.ok(response);
     }
 
+    //Recuperar contraseña
+    @PostMapping("/user/recuperar")
+    public ResponseEntity<String> recuperar(@RequestBody Map<String> credentials) {
+        String email = credentials.get("email");
+    
+        System.out.println("Email: " + email);
+    
+        String response = webClient.post()
+            .uri("https://users-production-b7a8.up.railway.app/app/users/recuperar")
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .body(BodyInserters.fromValue(credentials))
+            .retrieve()
+            .bodyToMono(String.class)
+            .doOnError(error -> System.out.println("Error: " + error.getMessage()))
+            .block();
+    
+        return ResponseEntity.ok(response);
+    }
 
 
     //Crear cliente
