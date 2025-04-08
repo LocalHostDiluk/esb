@@ -150,6 +150,7 @@ public class ESBController {
     }
 
 
+
     //Crear cliente
     @PostMapping("/client")
     public ResponseEntity createClient(@RequestBody Client client,
@@ -165,7 +166,7 @@ public class ESBController {
 
         // Enviar petición al servicio de clientes
         String clientResponse = webClient.post()
-            .uri("http://cliente.railway.internal:7000/app/client/create")
+            .uri("https://cliente-production-841a.up.railway.app/app/client/create")
             .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .body(BodyInserters.fromValue(client))
             .retrieve()
@@ -207,7 +208,7 @@ public class ESBController {
         }
 
         String response = webClient.get()
-            .uri("http://cliente.railway.internal:7000/app/client/all")
+            .uri("https://cliente-production-841a.up.railway.app/app/client/all")
             .retrieve()
             .bodyToMono(String.class)
             .doOnError(error -> System.out.println("Error al obtener clientes: " + error.getMessage()))
@@ -231,7 +232,7 @@ public class ESBController {
         }
 
         String response = webClient.patch()
-            .uri("http://cliente.railway.internal:7000/app/client/update/" + id)
+            .uri("https://cliente-production-841a.up.railway.app/app/client/update/" + id)
             .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .body(BodyInserters.fromValue(client))
             .retrieve()
@@ -255,7 +256,7 @@ public class ESBController {
         }
 
         String response = webClient.delete()
-            .uri("http://cliente.railway.internal:7000/app/client/delete/" + id)
+            .uri("https://cliente-production-841a.up.railway.app/app/client/delete/" + id)
             .retrieve()
             .bodyToMono(String.class)
             .doOnError(error -> System.out.println("Error al eliminar cliente: " + error.getMessage()))
@@ -263,6 +264,8 @@ public class ESBController {
 
         return ResponseEntity.ok(response);
     }
+
+
 
     //Obtener todos los productos
     @GetMapping("/producto")
@@ -279,4 +282,104 @@ public class ESBController {
         return ResponseEntity.ok(response);
     }
 
+    //Crear producto
+    @PostMapping("/producto")
+    public ResponseEntity createProduct(@RequestBody Product product,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        System.out.println("Request Body: " + product);
+        System.out.println("Token recibido: " + token);
+
+        // Validar token
+        if (!auth.validateToken(token)) {
+            return ResponseEntity.status(401)
+                .body("Token inválido o expirado");
+        }
+
+        // Enviar petición al servicio de productos
+        String response = webClient.post()
+            .uri("http://productos.railway.internal:5000/app/products/create")
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .body(BodyInserters.fromValue(product))
+            .retrieve()
+            .bodyToMono(String.class)
+            .doOnError(error -> System.out.println("Error al crear producto: " + error.getMessage()))
+            .block();
+
+        return ResponseEntity.ok(response);
+    }
+
+    //Actualizar producto
+    @PatchMapping("/producto/update/{id}")
+    public ResponseEntity updateProduct(@PathVariable String id,
+            @RequestBody Product product,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        System.out.println("Request Body: " + product);
+        System.out.println("Token recibido: " + token);
+        System.out.println("ID: " + id);
+
+        if (!auth.validateToken(token)) {
+            return ResponseEntity.status(401)
+                .body("Token inválido o expirado");
+        }
+
+        String response = webClient.patch()
+            .uri("http://productos.railway.internal:5000/app/products/update/" + id)
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .body(BodyInserters.fromValue(product))
+            .retrieve()
+            .bodyToMono(String.class)
+            .doOnError(error -> System.out.println("Error al actualizar producto: " + error.getMessage()))
+            .block();
+
+        return ResponseEntity.ok(response);
+    }
+
+    //Eliminar producto
+    @DeleteMapping("/producto/delete/{id}")
+    public ResponseEntity deleteProduct(@PathVariable String id,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        System.out.println("ID recibido para eliminar: " + id);
+        System.out.println("Token recibido: " + token);
+
+        if (!auth.validateToken(token)) {
+            return ResponseEntity.status(401)
+                .body("Token inválido o expirado");
+        }
+
+        String response = webClient.delete()
+            .uri("http://productos.railway.internal:5000/app/products/delete/" + id)
+            .retrieve()
+            .bodyToMono(String.class)
+            .doOnError(error -> System.out.println("Error al eliminar producto: " + error.getMessage()))
+            .block();
+
+        return ResponseEntity.ok(response);
+    }
+
+
+
+
+    //Obtener Pedido por ID
+    @GetMapping("/pedido/{id}")
+    public ResponseEntity getPedido(@PathVariable String id,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        System.out.println("ID recibido: " + id);
+        System.out.println("Token recibido: " + token);
+
+        if (!auth.validateToken(token)) {
+            return ResponseEntity.status(401)
+                .body("Token inválido o expirado");
+        }
+
+        String response = webClient.get()
+            .uri("http://pedido.railway.internal:8000/app/pedido/" + id)
+            .retrieve()
+            .bodyToMono(String.class)
+            .doOnError(error -> System.out.println("Error al obtener pedido: " + error.getMessage()))
+            .block();
+
+        return ResponseEntity.ok(response);
+    }
+
+    
 }
