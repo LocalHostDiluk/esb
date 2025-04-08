@@ -44,7 +44,7 @@ public class ESBController {
 
         // Enviar petición al servicio de usuarios
         String response = webClient.get()
-            .uri("http://users.railway.internal:5000/app/users/all")
+            .uri("https://users-production-b7a8.up.railway.app/app/users/all")
             .header(HttpHeaders.AUTHORIZATION, token) // Agregar el token en la petición
             .retrieve()
             .bodyToMono(String.class)
@@ -69,7 +69,7 @@ public class ESBController {
         
         //Enviar petición al servicio de usuarios
         String response = webClient.post()
-            .uri("http://users.railway.internal:5000/app/users/create")
+            .uri("https://users-production-b7a8.up.railway.app/app/users/create")
             .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .body(BodyInserters.fromValue(user))
             .retrieve()
@@ -95,7 +95,7 @@ public class ESBController {
         }
 
         String response = webClient.patch() // Usamos PATCH en lugar de POST
-            .uri("http://users.railway.internal:5000/app/users/update/" + id) // Coincide con la ruta del backend
+            .uri("https://users-production-b7a8.up.railway.app/app/users/update/" + id) // Coincide con la ruta del backend
             .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .body(BodyInserters.fromValue(user))
             .retrieve()
@@ -119,7 +119,7 @@ public class ESBController {
         }
 
         String response = webClient.delete() // Usamos DELETE en lugar de POST
-            .uri("http://users.railway.internal:5000/app/users/delete/" + id) // Coincide con la ruta del backend
+            .uri("https://users-production-b7a8.up.railway.app/app/users/delete/" + id) // Coincide con la ruta del backend
             .retrieve()
             .bodyToMono(String.class)
             .doOnError(error -> System.out.println("Error: " + error.getMessage()))
@@ -138,7 +138,7 @@ public class ESBController {
         System.out.println("Password: " + password);
     
         String response = webClient.post()
-            .uri("http://users.railway.internal:5000/app/users/login")
+            .uri("https://users-production-b7a8.up.railway.app/app/users/login")
             .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .body(BodyInserters.fromValue(credentials))
             .retrieve()
@@ -148,6 +148,7 @@ public class ESBController {
     
         return ResponseEntity.ok(response);
     }
+
 
     //Crear cliente
     @PostMapping("/client")
@@ -181,7 +182,7 @@ public class ESBController {
         newUser.setPassword("123456789a");
 
         String userResponse = webClient.post()
-            .uri("http://users.railway.internal:5000/app/users/create")
+            .uri("https://users-production-b7a8.up.railway.app/app/users/create")
             .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .body(BodyInserters.fromValue(newUser))
             .retrieve()
