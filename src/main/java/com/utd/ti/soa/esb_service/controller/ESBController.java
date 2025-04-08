@@ -151,7 +151,7 @@ public class ESBController {
 
     //Recuperar contraseña
     @PostMapping("/user/recuperar")
-    public ResponseEntity<String> recuperar(@RequestBody Map<String> credentials) {
+    public ResponseEntity<String> recuperar(@RequestBody Map<String, String> credentials) {
         String email = credentials.get("email");
     
         System.out.println("Email: " + email);
@@ -167,7 +167,7 @@ public class ESBController {
     
         return ResponseEntity.ok(response);
     }
-    
+
 
 
     //Crear cliente
