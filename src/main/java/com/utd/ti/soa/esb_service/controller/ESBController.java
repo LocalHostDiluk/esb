@@ -157,7 +157,7 @@ public class ESBController {
         System.out.println("Email: " + email);
     
         String response = webClient.post()
-            .uri("https://users-production-b7a8.up.railway.app/app/users/recuperar")
+            .uri("https://users-production-b7a8.up.railway.app/app/users/recover")
             .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .body(BodyInserters.fromValue(credentials))
             .retrieve()
@@ -167,6 +167,7 @@ public class ESBController {
     
         return ResponseEntity.ok(response);
     }
+    
 
 
     //Crear cliente
