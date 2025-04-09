@@ -514,75 +514,73 @@ public class ESBController {
         return ResponseEntity.ok(response);
     }
 
-    //Obtener categorias
-    @GettMapping("/categoria")
-    public ResponseEntity createCategory(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-
-        // Validar token
+    // Obtener categorías
+    @GetMapping("/categoria")
+    public ResponseEntity getCategories(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         if (!auth.validateToken(token)) {
-            return ResponseEntity.status(401)
-                .body("Token inválido o expirado");
+            return ResponseEntity.status(401).body("Token inválido o expirado");
         }
 
-        // Enviar petición al servicio de categorías
-        String response = webClient.post()
-            .uri("https://categories-production-195b.up.railway.app/app/categories")
-            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-            .body(BodyInserters.fromValue(category))
-            .retrieve()
-            .bodyToMono(String.class)
-            .doOnError(error -> System.out.println("Error al crear categoría: " + error.getMessage()))
-            .block();
+        try {
+            String response = webClient.get()
+                .uri("https://categories-production-195b.up.railway.app/app/categories")
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
 
-        return ResponseEntity.ok(response);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error al obtener categorías: " + e.getMessage());
+        }
     }
 
-    //Eliiminar categoría
+
+    // Eliminar categoría
     @DeleteMapping("/categoria/delete/{id}")
     public ResponseEntity deleteCategory(@PathVariable String id,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        System.out.println("ID recibido para eliminar: " + id);
-        
 
         if (!auth.validateToken(token)) {
-            return ResponseEntity.status(401)
-                .body("Token inválido o expirado");
+            return ResponseEntity.status(401).body("Token inválido o expirado");
         }
 
-        String response = webClient.delete()
-            .uri("https://categories-production-195b.up.railway.app/app/categories/" + id)
-            .retrieve()
-            .bodyToMono(String.class)
-            .doOnError(error -> System.out.println("Error al eliminar categoría: " + error.getMessage()))
-            .block();
+        try {
+            String response = webClient.delete()
+                .uri("https://categories-production-195b.up.railway.app/app/categories/" + id)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
 
-        return ResponseEntity.ok(response);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error al eliminar categoría: " + e.getMessage());
+        }
     }
 
-    //Crear categoría
+
+    // Crear categoría
     @PostMapping("/categoria")
     public ResponseEntity createCategory(@RequestBody Categoria category,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        System.out.println("Request Body: " + category);
-        
 
-        // Validar token
         if (!auth.validateToken(token)) {
-            return ResponseEntity.status(401)
-                .body("Token inválido o expirado");
+            return ResponseEntity.status(401).body("Token inválido o expirado");
         }
 
-        // Enviar petición al servicio de categorías
-        String response = webClient.post()
-            .uri("https://categories-production-195b.up.railway.app/app/categories/create")
-            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-            .body(BodyInserters.fromValue(category))
-            .retrieve()
-            .bodyToMono(String.class)
-            .doOnError(error -> System.out.println("Error al crear categoría: " + error.getMessage()))
-            .block();
+        try {
+            String response = webClient.post()
+                .uri("https://categories-production-195b.up.railway.app/app/categories/create")
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .body(BodyInserters.fromValue(category))
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
 
-        return ResponseEntity.ok(response);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error al crear categoría: " + e.getMessage());
+        }
     }
+
     
 }
