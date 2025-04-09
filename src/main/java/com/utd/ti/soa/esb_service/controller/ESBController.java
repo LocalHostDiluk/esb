@@ -573,7 +573,7 @@ public class ESBController {
         }
 
         String response = webClient.delete()
-            .uri("https://categories-production-195b.up.railway.app/app/categories/delete/" + id)
+            .uri("https://categories-production-195b.up.railway.app/app/categories/" + id)
             .retrieve()
             .bodyToMono(String.class)
             .doOnError(error -> System.out.println("Error al eliminar categoria: " + error.getMessage()))
