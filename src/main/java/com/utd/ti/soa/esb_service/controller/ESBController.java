@@ -514,30 +514,6 @@ public class ESBController {
         return ResponseEntity.ok(response);
     }
 
-    //Crear categoría
-    @PostMapping("/categoria")
-    public ResponseEntity createCategory(@RequestBody Map<String, Object> category,
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-
-        // Validar token
-        if (!auth.validateToken(token)) {
-            return ResponseEntity.status(401)
-                .body("Token inválido o expirado");
-        }
-
-        // Enviar petición al servicio de categorías
-        String response = webClient.post()
-            .uri("https://categories-production-195b.up.railway.app/app/categories/create")
-            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-            .body(BodyInserters.fromValue(category))
-            .retrieve()
-            .bodyToMono(String.class)
-            .doOnError(error -> System.out.println("Error al crear categoría: " + error.getMessage()))
-            .block();
-
-        return ResponseEntity.ok(response);
-    }
-
     //Obtener categorias
     @GettMapping("/categoria")
     public ResponseEntity createCategory(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
@@ -578,6 +554,32 @@ public class ESBController {
             .retrieve()
             .bodyToMono(String.class)
             .doOnError(error -> System.out.println("Error al eliminar categoría: " + error.getMessage()))
+            .block();
+
+        return ResponseEntity.ok(response);
+    }
+
+    //Crear categoría
+    @PostMapping("/categoria")
+    public ResponseEntity createCategory(@RequestBody Categoria category,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        System.out.println("Request Body: " + category);
+        
+
+        // Validar token
+        if (!auth.validateToken(token)) {
+            return ResponseEntity.status(401)
+                .body("Token inválido o expirado");
+        }
+
+        // Enviar petición al servicio de categorías
+        String response = webClient.post()
+            .uri("https://categories-production-195b.up.railway.app/app/categories/create")
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .body(BodyInserters.fromValue(category))
+            .retrieve()
+            .bodyToMono(String.class)
+            .doOnError(error -> System.out.println("Error al crear categoría: " + error.getMessage()))
             .block();
 
         return ResponseEntity.ok(response);
