@@ -34,7 +34,7 @@ public class ESBController {
     //Obtener todos los usuarios con autenticación
     @GetMapping("/user")
     public ResponseEntity getUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        System.out.println("Token recibido: " + token);
+        
 
         // Validar token
         if (!auth.validateToken(token)) {
@@ -59,7 +59,7 @@ public class ESBController {
     public ResponseEntity createUser (@RequestBody User user,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token){
         System.out.println("Request Body: " + user);
-        System.out.println("Token recibido: " + token);
+        
 
         //Validar token
         if (!auth.validateToken(token)){
@@ -86,7 +86,7 @@ public class ESBController {
             @RequestBody User user,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         System.out.println("Request Body: " + user);
-        System.out.println("Token recibido: " + token);
+        
         System.out.println("ID: " + id);
 
         if (!auth.validateToken(token)) {
@@ -111,7 +111,6 @@ public class ESBController {
     public ResponseEntity deleteUser(@PathVariable String id,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         System.out.println("ID recibido para eliminar: " + id);
-        System.out.println("Token recibido: " + token);
 
         if (!auth.validateToken(token)) {
             return ResponseEntity.status(401)
@@ -175,7 +174,7 @@ public class ESBController {
     public ResponseEntity createClient(@RequestBody Client client,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         System.out.println("Request Body: " + client);
-        System.out.println("Token recibido: " + token);
+        
 
         // Validar token
         if (!auth.validateToken(token)) {
@@ -219,7 +218,7 @@ public class ESBController {
     //Obtener clientes
     @GetMapping("/client")
     public ResponseEntity getClient(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        System.out.println("Token recibido: " + token);
+        
 
         if (!auth.validateToken(token)) {
             return ResponseEntity.status(401)
@@ -242,7 +241,7 @@ public class ESBController {
             @RequestBody Client client,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         System.out.println("Request Body: " + client);
-        System.out.println("Token recibido: " + token);
+        
         System.out.println("ID: " + id);
 
         if (!auth.validateToken(token)) {
@@ -267,7 +266,7 @@ public class ESBController {
     public ResponseEntity deleteClient(@PathVariable String id,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         System.out.println("ID recibido para eliminar: " + id);
-        System.out.println("Token recibido: " + token);
+        
 
         if (!auth.validateToken(token)) {
             return ResponseEntity.status(401)
@@ -291,7 +290,7 @@ public class ESBController {
     public ResponseEntity getProductById(@PathVariable String id,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         System.out.println("ID recibido: " + id);
-        System.out.println("Token recibido: " + token);
+        
 
         if (!auth.validateToken(token)) {
             return ResponseEntity.status(401)
@@ -311,7 +310,7 @@ public class ESBController {
     //Obtener todos los productos
     @GetMapping("/producto")
     public ResponseEntity getProduct(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        System.out.println("Token recibido: " + token);
+        
     
         String response = webClient.get()
             .uri("http://productos.railway.internal:5000/app/products/all")
@@ -328,7 +327,7 @@ public class ESBController {
     public ResponseEntity createProduct(@RequestBody Product product,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         System.out.println("Request Body: " + product);
-        System.out.println("Token recibido: " + token);
+        
 
         // Validar token
         if (!auth.validateToken(token)) {
@@ -355,7 +354,7 @@ public class ESBController {
             @RequestBody Product product,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         System.out.println("Request Body: " + product);
-        System.out.println("Token recibido: " + token);
+        
         System.out.println("ID: " + id);
 
         if (!auth.validateToken(token)) {
@@ -380,7 +379,7 @@ public class ESBController {
     public ResponseEntity deleteProduct(@PathVariable String id,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         System.out.println("ID recibido para eliminar: " + id);
-        System.out.println("Token recibido: " + token);
+        
 
         if (!auth.validateToken(token)) {
             return ResponseEntity.status(401)
@@ -404,7 +403,7 @@ public class ESBController {
     public ResponseEntity createPedido(@RequestBody Map<String, Object> pedido,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         System.out.println("Request Body: " + pedido);
-        System.out.println("Token recibido: " + token);
+        
 
         // Validar token
         if (!auth.validateToken(token)) {
@@ -430,7 +429,7 @@ public class ESBController {
     public ResponseEntity getPedido(@PathVariable String id,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         System.out.println("ID recibido: " + id);
-        System.out.println("Token recibido: " + token);
+        
 
         if (!auth.validateToken(token)) {
             return ResponseEntity.status(401)
@@ -450,7 +449,7 @@ public class ESBController {
     //Obtener todos los pedidos
     @GetMapping("/pedido")
     public ResponseEntity getAllPedidos(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        System.out.println("Token recibido: " + token);
+        
 
         if (!auth.validateToken(token)) {
             return ResponseEntity.status(401)
@@ -472,7 +471,7 @@ public class ESBController {
     public ResponseEntity cancelPedido(@PathVariable String id,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         System.out.println("ID recibido para cancelar: " + id);
-        System.out.println("Token recibido: " + token);
+        
 
         if (!auth.validateToken(token)) {
             return ResponseEntity.status(401)
@@ -495,7 +494,7 @@ public class ESBController {
             @RequestBody Map<String, Object> pedido,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         System.out.println("Request Body: " + pedido);
-        System.out.println("Token recibido: " + token);
+        
         System.out.println("ID: " + id);
 
         if (!auth.validateToken(token)) {
@@ -515,6 +514,73 @@ public class ESBController {
         return ResponseEntity.ok(response);
     }
 
+    //Crear categoría
+    @PostMapping("/categoria")
+    public ResponseEntity createCategory(@RequestBody Map<String, Object> category,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
+        // Validar token
+        if (!auth.validateToken(token)) {
+            return ResponseEntity.status(401)
+                .body("Token inválido o expirado");
+        }
+
+        // Enviar petición al servicio de categorías
+        String response = webClient.post()
+            .uri("https://categories-production-195b.up.railway.app/app/categories/create")
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .body(BodyInserters.fromValue(category))
+            .retrieve()
+            .bodyToMono(String.class)
+            .doOnError(error -> System.out.println("Error al crear categoría: " + error.getMessage()))
+            .block();
+
+        return ResponseEntity.ok(response);
+    }
+
+    //Obtener categorias
+    @GettMapping("/categoria")
+    public ResponseEntity createCategory(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+
+        // Validar token
+        if (!auth.validateToken(token)) {
+            return ResponseEntity.status(401)
+                .body("Token inválido o expirado");
+        }
+
+        // Enviar petición al servicio de categorías
+        String response = webClient.post()
+            .uri("https://categories-production-195b.up.railway.app/app/categories")
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .body(BodyInserters.fromValue(category))
+            .retrieve()
+            .bodyToMono(String.class)
+            .doOnError(error -> System.out.println("Error al crear categoría: " + error.getMessage()))
+            .block();
+
+        return ResponseEntity.ok(response);
+    }
+
+    //Eliiminar categoría
+    @DeleteMapping("/categoria/delete/{id}")
+    public ResponseEntity deleteCategory(@PathVariable String id,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        System.out.println("ID recibido para eliminar: " + id);
+        
+
+        if (!auth.validateToken(token)) {
+            return ResponseEntity.status(401)
+                .body("Token inválido o expirado");
+        }
+
+        String response = webClient.delete()
+            .uri("https://categories-production-195b.up.railway.app/app/categories/" + id)
+            .retrieve()
+            .bodyToMono(String.class)
+            .doOnError(error -> System.out.println("Error al eliminar categoría: " + error.getMessage()))
+            .block();
+
+        return ResponseEntity.ok(response);
+    }
     
 }
