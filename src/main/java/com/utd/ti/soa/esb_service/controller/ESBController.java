@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.utd.ti.soa.esb_service.model.Categoria;
 import com.utd.ti.soa.esb_service.model.Client;
 import com.utd.ti.soa.esb_service.model.User;
 import com.utd.ti.soa.esb_service.utils.Auth;
@@ -509,6 +510,73 @@ public class ESBController {
             .retrieve()
             .bodyToMono(String.class)
             .doOnError(error -> System.out.println("Error al actualizar pedido: " + error.getMessage()))
+            .block();
+
+        return ResponseEntity.ok(response);
+    }
+
+    //Crear categoria
+    @PostMapping("/categoria")
+    public ResponseEntity createCategoria(@RequestBody Categoria categoria,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        System.out.println("Request Body: " + categoria);
+        
+
+        // Validar token
+        if (!auth.validateToken(token)) {
+            return ResponseEntity.status(401)
+                .body("Token inválido o expirado");
+        }
+
+        // Enviar petición al servicio de categorias
+        String response = webClient.post()
+            .uri("https://categories-production-195b.up.railway.app/app/categories/create")
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .body(BodyInserters.fromValue(categoria))
+            .retrieve()
+            .bodyToMono(String.class)
+            .doOnError(error -> System.out.println("Error al crear categoria: " + error.getMessage()))
+            .block();
+
+        return ResponseEntity.ok(response);
+    }
+
+    //Obtener categoria
+    @GetMapping("/categoria")
+    public ResponseEntity getCategoria(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+
+        if (!auth.validateToken(token)) {
+            return ResponseEntity.status(401)
+                .body("Token inválido o expirado");
+        }
+
+        String response = webClient.get()
+            .uri("https://categories-production-195b.up.railway.app/app/categories")
+            .retrieve()
+            .bodyToMono(String.class)
+            .doOnError(error -> System.out.println("Error: " + error.getMessage()))
+            .block();
+
+        return ResponseEntity.ok(response);
+    }
+
+    //Eliminar categoria
+    @DeleteMapping("/categoria/delete/{id}")
+    public ResponseEntity deleteCategoria(@PathVariable String id,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        System.out.println("ID recibido para eliminar: " + id);
+        
+
+        if (!auth.validateToken(token)) {
+            return ResponseEntity.status(401)
+                .body("Token inválido o expirado");
+        }
+
+        String response = webClient.delete()
+            .uri("https://categories-production-195b.up.railway.app/app/categories/delete/" + id)
+            .retrieve()
+            .bodyToMono(String.class)
+            .doOnError(error -> System.out.println("Error al eliminar categoria: " + error.getMessage()))
             .block();
 
         return ResponseEntity.ok(response);
