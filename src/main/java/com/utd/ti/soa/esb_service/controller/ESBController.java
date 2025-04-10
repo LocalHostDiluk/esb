@@ -601,5 +601,30 @@ public class ESBController {
 
         return ResponseEntity.ok(response);
     }
+
+    @PatchMapping("/categoria/actualizar/{id}")
+    public ResponseEntity updatePedido(@PathVariable String id,
+            @RequestBody Categoria categoria,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        System.out.println("Request Body: " + pedido);
+        
+        System.out.println("ID: " + id);
+
+        if (!auth.validateToken(token)) {
+            return ResponseEntity.status(401)
+                .body("Token inválido o expirado");
+        }
+
+        String response = webClient.patch()
+            .uri("https://categories-production-195b.up.railway.app/app/categories/update/" + id)
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .body(BodyInserters.fromValue(pedido))
+            .retrieve()
+            .bodyToMono(String.class)
+            .doOnError(error -> System.out.println("Error al actualizar pedido: " + error.getMessage()))
+            .block();
+
+        return ResponseEntity.ok(response);
+    }
     
 }
