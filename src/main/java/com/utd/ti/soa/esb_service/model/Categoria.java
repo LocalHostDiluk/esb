@@ -7,4 +7,5 @@ import lombok.Setter;
 @Setter
 public class Categoria {
     private String nombre;
+    private String descripcion;
 }
