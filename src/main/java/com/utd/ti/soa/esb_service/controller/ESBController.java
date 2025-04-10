@@ -284,7 +284,27 @@ public class ESBController {
         return ResponseEntity.ok(response);
     }
 
+    //Obtener pedidos por cliente
+    @GetMapping("/pedido/cliente/{id}")
+    public ResponseEntity getPedidoByClient(@PathVariable String id,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        System.out.println("ID recibido: " + id);
+        
 
+        if (!auth.validateToken(token)) {
+            return ResponseEntity.status(401)
+                .body("Token inválido o expirado");
+        }
+
+        String response = webClient.get()
+            .uri("https://pedidos-production-2523.up.railway.app/app/pedidos/cliente/" + id)
+            .retrieve()
+            .bodyToMono(String.class)
+            .doOnError(error -> System.out.println("Error al obtener pedido por cliente: " + error.getMessage()))
+            .block();
+
+        return ResponseEntity.ok(response);
+    }
 
     //Obtener producto por ID
     @GetMapping("/producto/{id}")
