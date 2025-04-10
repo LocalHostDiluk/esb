@@ -11,5 +11,5 @@ public class Product {
     private String stock;
     private String descripcion;
     private String imagen;
-    private String categoria;
+    private String categoria_id;
 }
