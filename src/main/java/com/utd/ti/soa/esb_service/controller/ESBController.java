@@ -603,28 +603,35 @@ public class ESBController {
     }
 
     @PatchMapping("/categoria/actualizar/{id}")
-    public ResponseEntity updatePedido(@PathVariable String id,
+    public ResponseEntity<?> updateCategoria(
+            @PathVariable String id,
             @RequestBody Categoria categoria,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        System.out.println("Request Body: " + pedido);
         
+        System.out.println("Request Body: " + categoria);
         System.out.println("ID: " + id);
-
+    
+        // Validación de token
         if (!auth.validateToken(token)) {
-            return ResponseEntity.status(401)
-                .body("Token inválido o expirado");
+            return ResponseEntity.status(401).body("Token inválido o expirado");
         }
-
-        String response = webClient.patch()
-            .uri("https://categories-production-195b.up.railway.app/app/categories/update/" + id)
-            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-            .body(BodyInserters.fromValue(pedido))
-            .retrieve()
-            .bodyToMono(String.class)
-            .doOnError(error -> System.out.println("Error al actualizar pedido: " + error.getMessage()))
-            .block();
-
-        return ResponseEntity.ok(response);
+    
+        try {
+            String response = webClient.patch()
+                .uri("https://categories-production-195b.up.railway.app/app/categories/update/" + id)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .header(HttpHeaders.AUTHORIZATION, token)
+                .body(BodyInserters.fromValue(categoria))
+                .retrieve()
+                .bodyToMono(String.class)
+                .doOnError(error -> System.out.println("❌ Error al actualizar categoría: " + error.getMessage()))
+                .block();
+    
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            System.out.println("❌ Excepción en la actualización: " + e.getMessage());
+            return ResponseEntity.status(500).body("Error interno al actualizar categoría");
+        }
     }
     
 }
