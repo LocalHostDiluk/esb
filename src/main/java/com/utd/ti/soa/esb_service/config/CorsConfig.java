@@ -13,10 +13,10 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:8081") // Permitir peticiones desde Expo
-                        .allowedMethods("GET", "POST", "PUT", "DELETE")
+                        .allowedOrigins("*") // Permitir cualquier origen
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
-                        .allowCredentials(true);
+                        .allowCredentials(false); // true solo si necesitas cookies
             }
         };
     }
